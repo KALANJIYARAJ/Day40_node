@@ -3,11 +3,12 @@ const cors = require("cors");
 const mongodb = require("mongodb");
 const mongoclient = mongodb.MongoClient;
 const app = express();
-const URL = "mongodb+srv://admin:admin123@cluster0.zfkqxf5.mongodb.net/?retryWrites=true&w=majority";
+const dotenv = require("dotenv").config();
+const URL = process.env.DB;
 
 app.use(
   cors({
-    orgin: "https://roaring-druid-e5075c.netlify.app",  //"http://localhost:3000/",
+    orgin: "https://roaring-druid-e5075c.netlify.app", //"http://localhost:3000/",
   })
 );
 
@@ -77,7 +78,7 @@ app.put("/product/:productId", async (req, res) => {
     const productData = await db
       .collection("products")
       .findOne({ _id: mongodb.ObjectId(req.params.productId) });
-   
+
     if (productData) {
       //select the Collection
       //Do operation (CRUD)
@@ -140,11 +141,9 @@ app.delete("/product/:productId", async (req, res) => {
       //close the connection
       await connection.close();
       res.json(product);
-    }else{
+    } else {
       res.status(404).json({ message: "Product Not Found" });
     }
-    
-   
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
   }
@@ -181,7 +180,6 @@ app.get("/product/:productId", async (req, res) => {
     } else {
       res.status(404).json({ message: "Product Not Found" });
     }
-   
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Something went wrong" });
