@@ -7,7 +7,7 @@ const URL = "mongodb+srv://admin:admin123@cluster0.zfkqxf5.mongodb.net/?retryWri
 
 app.use(
   cors({
-    orgin: "https://roaring-druid-e5075c.netlify.app/"   //"http://localhost:3000/",
+    orgin:"https://roaring-druid-e5075c.netlify.app/"   //"http://localhost:3000/",
   })
 );
 
