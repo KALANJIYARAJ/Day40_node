@@ -5,6 +5,7 @@ const mongoclient = mongodb.MongoClient;
 const app = express();
 const dotenv = require("dotenv").config();
 const URL = process.env.DB;
+const bcrypt = require('bcrypt');
 
 app.use(
   cors({
@@ -24,6 +25,11 @@ app.post("/user/register", async (req, res) => {
     //select the DB
     const db = connection.db("B39WDT2");
 
+    //Hash the password
+    var salt = await bcrypt.genSalt(10);
+    var hash = await bcrypt.hash(req.body.password,salt)
+    //Select the Collection
+
     //select the Collection
     //Do operation (CRUD)
     const user = await db.collection("users").insertOne(req.body);
@@ -35,10 +41,6 @@ app.post("/user/register", async (req, res) => {
     console.log(error);
     res.status(500).json({ message: "Something went wrong" });
   }
-
-  //   req.body.id = products.length + 1;
-  //   products.push(req.body);
-  //   res.json({ message: "product addded", id: products.length });
 });
 
 
@@ -108,6 +110,7 @@ app.put("/product/:productId", async (req, res) => {
     if (productData) {
       //select the Collection
       //Do operation (CRUD)
+      delete req.body._id
       const product = await db
         .collection("products")
         .updateOne(
