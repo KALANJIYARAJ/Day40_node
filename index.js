@@ -16,6 +16,32 @@ app.use(express.json());
 
 let products = [];
 
+app.post("/user/register", async (req, res) => {
+  try {
+    //connect the Database
+    const connection = await mongoclient.connect(URL);
+
+    //select the DB
+    const db = connection.db("B39WDT2");
+
+    //select the Collection
+    //Do operation (CRUD)
+    const user = await db.collection("users").insertOne(req.body);
+    console.log(user);
+    //close the connection
+    await connection.close();
+    res.json({ message: "users created"});
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+
+  //   req.body.id = products.length + 1;
+  //   products.push(req.body);
+  //   res.json({ message: "product addded", id: products.length });
+});
+
+
 //create
 app.post("/product", async (req, res) => {
   try {
